@@ -7,42 +7,76 @@
 
 For compiled code, a type checker proves substitutability before the program
 ships. For a skill, there's no equivalent proof: if a specialized skill
-*extends* a base discipline, the intent is that anything relying on "the
-discipline for this task" gets the same guarantees regardless of which
-specialization loaded — the same closing checklist, the same failure
-behavior, the same non-negotiable rules — with only the mechanics swapped
-out. But a model interpreting that specialized skill can drift from the
-base's intent in ways nothing catches at authoring time.
+extends, or is meant to stand in for, a base capability, the intent is that
+anything relying on "the discipline for this task" gets the same guarantees
+regardless of which specialization loaded — the same closing checklist, the
+same failure behavior, the same non-negotiable rules — with only the
+mechanics swapped out. But a model interpreting that specialized skill can
+drift from the base's intent in ways nothing catches at authoring time.
 
 Calling that "solved" would be dishonest. The honest version:
 **substitutability is aspirational by default, and becomes real only where
 you deliberately test for it.**
 
+## What frontier labs say — or rather, don't
+
+This is the one principle where a look at the published guidance comes up
+mostly empty. Anthropic's authoring guide talks at length about
+descriptions, structure, progressive disclosure, and evaluation-driven
+iteration — but nowhere addresses whether a specialized skill behaves
+consistently with the general one it specializes. OpenAI's function-calling
+guidance is silent on it too. That's not a gap in this research, it's a
+signal: nobody has published a general mechanism for this because there
+isn't one yet. The closest anyone gets in practice is testing one specific,
+narrow contract for equality — which is a much smaller, much more honest
+claim than substitutability.
+
 ## Do / Don't
 
 | Do | Don't |
 |---|---|
-| If a set of specializations must share a non-negotiable contract (a closing ritual, a reporting format, a hard rule), extract it into one literal, shared block and test that every specialization carries it **byte-for-byte identical**. | Assume that because skill B declares `extends: A`, B behaves consistently with A. Nothing enforces that by construction. |
+| If a set of specializations must share a non-negotiable contract (a closing ritual, a reporting format, a hard rule), extract it into one literal, shared block and test that every specialization carries it **byte-for-byte identical**. | Assume that because skill B extends or specializes skill A, B behaves consistently with A. Nothing enforces that by construction. |
 | Scope your substitutability claims narrowly — "these five skills share this one enforced block" — rather than broadly — "everything that extends anything is substitutable." | Advertise general Liskov compliance across every extension relationship in the catalog. You can't back that claim with a test, so don't make it. |
-| Treat a failed byte-identity check as a hard build failure, the same way a broken interface would fail a type check. | Let the shared contract drift silently across specializations because "it's just a prompt, it'll be fine." |
+| Treat a failed equality check as a hard build failure, the same way a broken interface would fail a type check. | Let the shared contract drift silently across specializations because "it's just a prompt, it'll be fine." |
 
-## Worked example
+## Anti-pattern in practice
 
-A minimal enforced-equivalence check (conceptual, not framework-specific):
+**Bad — silent drift between a base and its specialization:**
 
-```js
-// every "*-tdd" skill must carry the same closing checklist, verbatim
-const base = extractBlock('skills/test-driven-development/SKILL.md', 'CLOSING_CHECKLIST');
-for (const variant of ['test-driven-development-jvm', 'test-driven-development-kafka']) {
-  const block = extractBlock(`skills/${variant}/SKILL.md`, 'CLOSING_CHECKLIST');
-  assert.equal(block, base, `${variant} drifted from the base closing checklist`);
-}
+```markdown
+<!-- discipline/testing.md -->
+## Closing checklist
+- [ ] All tests pass
+- [ ] No skipped tests without a linked ticket
+- [ ] Coverage report attached
 ```
 
-That's a real, mechanically enforced substitutability guarantee — for one
-specific block, across one specific set of skills. It is not, and doesn't
-claim to be, a guarantee that every `extends` relationship in the catalog is
-behaviorally safe to substitute.
+```markdown
+<!-- stack/testing-jvm.md (extends discipline/testing.md) -->
+## Closing checklist
+- [ ] Tests pass
+- [ ] Coverage looks reasonable
+```
+
+Nothing enforces that these say the same thing — and they don't. "No
+skipped tests without a linked ticket" quietly disappeared, and "coverage
+report attached" softened into "looks reasonable." A caller trusting the
+base's contract gets a silently weaker one from the specialization.
+
+**Good — the shared contract is one literal block, checked for equality:**
+
+```markdown
+<!-- shared/closing-checklist.md — included verbatim by every specialization -->
+## Closing checklist
+- [ ] All tests pass
+- [ ] No skipped tests without a linked ticket
+- [ ] Coverage report attached
+```
+
+```js
+// build check: every specialization must include this block byte-for-byte
+assert.equal(extractBlock(variantPath, 'Closing checklist'), sharedBlock);
+```
 
 ## Where this bends
 
@@ -50,5 +84,5 @@ This is the principle where the OOP metaphor is weakest. Use it as a design
 goal ("a specialization shouldn't surprise a caller relying on the base's
 contract"), and back it with tests only where you can define the contract
 precisely enough to check it byte-for-byte or field-for-field. Anywhere you
-can't define it that precisely, say so — an untested "should behave like" is
-a hope, not a guarantee.
+can't define it that precisely, say so — an untested "should behave like"
+is a hope, not a guarantee.

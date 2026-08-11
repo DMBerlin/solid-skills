@@ -5,49 +5,68 @@
 
 ## Translated for skills
 
-If the thing that decides "which skills does this project need" is a
-**query over metadata** ("every discipline skill, plus everything tagged for
-this stack") rather than a **hand-maintained list of skill names**, then
-adding a new skill in an existing category makes it available everywhere
-that category is queried — with zero edits to any existing configuration.
-The configuration is closed: you never modify it to onboard a new
-capability. The catalog is open: a new, correctly tagged skill is reachable
-the moment it exists.
+If the thing that decides "which skills does this agent have access to" is a
+**query or a directory scan** — pick up every skill dropped into a folder,
+or every skill matching a tag — rather than a **hand-maintained list of
+skill names baked into configuration**, then adding a new skill makes it
+available immediately, with zero edits to anything that already exists. The
+registry is closed: you never modify it to onboard a new capability. The
+catalog is open: drop in a new, correctly described skill and it's
+reachable.
 
-The other half of this principle is specialization by extension: a base
-skill states a general contract; a specialized skill builds on it without
-the base ever needing to know the specialization exists.
+The other half is specialization by extension or composition: a base skill
+states a general contract; a specialized skill builds on it — through an
+explicit "extends" relationship, or simply by depending on it — without the
+base ever needing to know the specialization exists.
+
+## What frontier labs say
+
+Anthropic's Skills architecture is built around exactly this: skills are
+discovered by scanning a directory and pre-loading each one's metadata into
+the system prompt — the runtime never needs a hand-written manifest naming
+every skill in advance. Anthropic's tool-naming guidance pushes the same
+idea from a different angle: namespace tools by service or resource
+(`asana_search`, `jira_search`, `asana_projects_search`) precisely so that
+adding a new tool for a new service never requires renaming or restructuring
+the tools that already exist.
+[[source]](https://www.anthropic.com/engineering/writing-tools-for-agents)
 
 ## Do / Don't
 
 | Do | Don't |
 |---|---|
-| Select skills by querying metadata (category, stack, always-on scope) at resolution time. | Maintain a static, per-project list of skill names that has to be hand-edited every time a new skill ships. |
-| Let a specialized skill declare what it extends, and let the base stay ignorant of every specialization that exists. | Modify a base skill's content every time a new stack needs a variant — that's a modification, not an extension. |
-| Treat "add a new tagged skill" as a change with a blast radius of one file. | Treat "add a new capability" as a change that requires touching N existing configs to wire it up. |
+| Discover skills by directory scan or metadata query at load/startup time. | Maintain a static, per-project list of skill names that has to be hand-edited every time a new skill ships. |
+| Namespace related tools/skills by service or domain (`asana_search`, `jira_search`) so a new integration adds a new namespace, not a redesign of an existing one. | Give every tool a flat, generic name (`search`, `search2`) that collides the moment a second integration needs the same verb. |
+| Let a specialized skill declare what it extends or depends on; keep the base ignorant of every specialization that exists. | Modify a base skill's content every time a new variant is needed — that's a modification, not an extension. |
 
-## Worked example
+## Anti-pattern in practice
 
-Adding a Kafka-flavored TDD specialization:
+**Bad — a second integration forces a rename of the first:**
 
-```yaml
----
-name: test-driven-development-kafka
-kind: stack
-stack: backend-kafka
-extends: test-driven-development
-scope: contextual
----
-# Embedded-broker test conventions for event-driven consumers/producers.
+```
+tools:
+  search        # originally: Asana search
+  search_2      # now: Jira search, bolted on
+  search_v2_new # now: Linear search, whoever's turn it was to be creative
 ```
 
-Nothing about `test-driven-development` changes. Nothing about any existing
-project configuration that already selects `kind: discipline` skills
-changes. The new skill exists, is tagged, and becomes selectable the moment
-it's added — that's the whole diff.
+Every new integration is a naming collision to be worked around, not a
+clean addition.
+
+**Good — namespaced from the start:**
+
+```
+tools:
+  asana_search
+  jira_search
+  linear_search
+```
+
+Adding `notion_search` next month touches nothing that already exists.
 
 ## Smell to watch for
 
-A "supported skills" list that needs an edit every time someone adds a
-capability. If onboarding a new skill requires touching more than the skill
-itself, the catalog isn't open/closed — it's just a list.
+A "supported skills/tools" list, or a naming scheme, that needs an edit or a
+rename every time someone adds a capability. If onboarding a new one
+requires touching more than the new thing itself, the system isn't
+open/closed — it's just a list.

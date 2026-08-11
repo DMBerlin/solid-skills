@@ -9,49 +9,76 @@ This is the principle most posts flatten into one claim when it's really
 two, at two different layers of the system.
 
 **Content-level:** a skill that needs another capability should declare a
-dependency on an **abstract capability name** — "I require the capability
-that does X" — resolved by whatever composes skills together, not a
-hardcoded path to a specific sibling skill's file. The skill author doesn't
-need to know, or care, exactly which concrete skill satisfies that name; the
-resolution mechanism decides.
+dependency on an abstract, stable **name** — "I require the capability that
+does X" — resolved by whatever composes skills together, not a hardcoded
+path to a specific sibling skill's file or an assumption about which
+concrete tool happens to be present.
 
 **Architecture-level — the one that isn't a metaphor at all:** the part of
-the system that decides *which* skills apply (selection, conflict
-resolution, precedence) should be a pure function of data — it receives an
-in-memory representation of the catalog as a parameter and touches no
-filesystem, no network, no clock. All the actual I/O — reading skill files
-off disk, writing a resolved result somewhere — happens at the edges of the
-system and gets *injected into* that pure core. The high-level policy ("how
-do we pick skills") doesn't depend on the low-level detail ("how do we read
-files"); both depend on a shared, typed abstraction of what a skill and a
-catalog look like.
+the system that decides *which* skills apply (discovery, selection, conflict
+resolution) should be a pure function of data — it receives an in-memory
+representation of the catalog as a parameter and touches no filesystem, no
+network, no clock. All the actual I/O happens at the edges of the system and
+gets *injected into* that pure core. The high-level policy ("how do we pick
+skills") doesn't depend on the low-level detail ("how do we read files");
+both depend on a shared, typed abstraction of what a skill and a catalog
+look like.
+
+## What frontier labs say
+
+Anthropic's tool-use guidance has a direct, content-level example of this:
+when a skill uses an MCP tool, always reference it by a fully-qualified name
+— `ServerName:tool_name` — rather than a bare tool name, "to avoid 'tool not
+found' errors," because "without the server prefix, Claude may fail to
+locate the tool, especially when multiple MCP servers are available." That's
+a dependency declared against a stable, namespaced abstraction instead of an
+assumption about which concrete server happens to be loaded. The same
+guidance separately flags assuming a package or tool is already installed:
+`"Use the pdf library to process the file"` is called out as a bad example
+precisely because it depends on an implicit, unstated piece of environment
+instead of declaring the dependency explicitly (state the install step,
+`pip install pypdf`, then use it).
+[[source]](https://platform.claude.com/docs/en/agents-and-tools/agent-skills/best-practices)
 
 ## Do / Don't
 
 | Do | Don't |
 |---|---|
-| Declare skill-to-skill dependencies by abstract name (`requires: capability-x`), resolved by the composition system. | Hardcode a path or assume a sibling skill exists at a specific location — now every skill author has to know the whole catalog's layout. |
-| Write the skill-selection logic as a pure function: catalog in, resolved selection out, no I/O inside it. | Let the selection logic reach into the filesystem itself — now you can't unit-test "did we pick the right skills" without mocking disk access. |
-| Push every read/write to disk to one narrow, designated edge of the system, injected into the pure core as data. | Scatter file-system calls throughout the selection/resolution logic "because it's convenient right here." |
+| Declare skill-to-tool or skill-to-skill dependencies by fully-qualified, stable name, resolved by the composition system. | Reference a bare tool/skill name and hope only one thing in the whole catalog happens to match it. |
+| State required packages/tools explicitly, with the install step, inside the skill itself. | Assume a library, binary, or sibling skill is present because it happened to be during authoring. |
+| Write skill-selection logic as a pure function: catalog in, resolved selection out, no I/O inside it. | Let selection logic reach into the filesystem itself — now "did we pick the right skills" can't be unit-tested without mocking disk access. |
 
-## Worked example
+## Anti-pattern in practice
 
+**Bad — depends on an unstated, ambient assumption:**
+
+```markdown
+Use the search tool to look up the ticket, then use the pdf library to
+extract the attachment text.
 ```
-loadCatalog(rootDir)      # the only place that touches disk
-    -> Catalog             # plain in-memory data
 
-resolve(presetQuery, catalog)   # pure: no fs, no network, no clock
-    -> ResolvedSkillSet
+Which `search` tool, of possibly several loaded? Is `pdf` installed, and by
+whom? The dependency is real but invisible — it works only by accident, on
+whichever machine happens to already have it set up.
+
+**Good — dependencies named and declared:**
+
+```markdown
+Use the Jira:search_issues tool to look up the ticket.
+
+Install the required package: `pip install pypdf`, then extract the
+attachment text:
+
+    from pypdf import PdfReader
+    reader = PdfReader("attachment.pdf")
 ```
 
-`resolve` can be unit-tested with a hand-built in-memory catalog and zero
-temp directories, mocks, or fixtures on disk. That's not a nice-to-have side
-effect of good taste — it's the direct, provable payoff of pushing the
-dependency on "how do we get the data" out to the edge and inverting it, so
-the high-level policy depends on an abstraction instead of a filesystem.
+Every dependency is a stable, explicit name — a namespaced tool reference or
+a declared package — not an assumption about the environment it happened to
+be authored on.
 
 ## Smell to watch for
 
-Any test for "did we select the right skills" that requires setting up files
-on disk. That's a sign the selection logic and the I/O layer haven't
-actually been inverted — they're still fused.
+Any test for "did we select the right skills" that requires setting up
+files on disk, or any instruction that only works because of something true
+about one particular machine at one particular moment.
