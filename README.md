@@ -26,8 +26,10 @@ and file structure.
 ## Not tied to one framework
 
 Different skill systems express the same underlying ideas with different
-mechanics — a closed category taxonomy in one, a free-text `description`
-field in another, a folder-per-domain convention in a third. Across the
+mechanics — a closed category taxonomy in one (an adoptable design pattern
+illustrated generically here, not a named external spec), a free-text
+`description` field in another (Anthropic's actual, published convention),
+a folder-per-domain convention in a third. Across the
 principle pages, more than one real convention shows up — including
 Anthropic's own published Agent Skills spec (`name` + `description`
 frontmatter, gerund naming, progressive disclosure) alongside a generic
@@ -82,14 +84,18 @@ names are just easier to picture than "Service A" and "Service B."
 
 ## Sources
 
-Primary sources cited throughout the principle pages:
+Cited directly, inline, in one or more principle pages:
 
-- Anthropic — [Equipping agents for the real world with Agent Skills](https://www.anthropic.com/engineering/equipping-agents-for-the-real-world-with-agent-skills)
 - Anthropic — [Skill authoring best practices](https://platform.claude.com/docs/en/agents-and-tools/agent-skills/best-practices)
 - Anthropic — [Agent Skills overview](https://platform.claude.com/docs/en/agents-and-tools/agent-skills/overview)
 - Anthropic — [Writing effective tools for AI agents](https://www.anthropic.com/engineering/writing-tools-for-agents)
-- Anthropic — [Building effective agents](https://www.anthropic.com/engineering/building-effective-agents)
 - OpenAI — [Function calling guide](https://developers.openai.com/api/docs/guides/function-calling)
+
+Background reading that shaped this repo's framing but isn't quoted in a
+specific page:
+
+- Anthropic — [Equipping agents for the real world with Agent Skills](https://www.anthropic.com/engineering/equipping-agents-for-the-real-world-with-agent-skills)
+- Anthropic — [Building effective agents](https://www.anthropic.com/engineering/building-effective-agents)
 
 ## Related reading
 

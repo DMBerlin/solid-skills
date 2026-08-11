@@ -6,14 +6,17 @@
 
 A skill should encapsulate one capability, and one reason to change. That's
 easy to say and hard to keep true once a catalog grows past a handful of
-skills. Two independent mechanisms get you there, and different skill
-systems reach for different ones:
+skills. Two mechanisms get you there — one is a design pattern worth
+adopting, the other is a published, sourced convention:
 
 - **A closed category taxonomy**, declared in frontmatter and validated at
   load time, so a skill can't quietly claim to be two unrelated kinds of
-  thing at once.
+  thing at once. This is illustrated generically in this repo as a pattern
+  worth adopting — it isn't a named external spec, and no claim here says
+  otherwise.
 - **A specific, single-purpose description**, so the boundary of "what this
-  skill is for" is legible from one field, even without a formal taxonomy.
+  skill is for" is legible from one field, even without a formal taxonomy —
+  this is Anthropic's actual, published convention (see below).
 
 ## What frontier labs say
 

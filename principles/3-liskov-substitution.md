@@ -31,11 +31,14 @@ only where you deliberately test a defined contract.**
 ## What frontier labs say — or rather, don't
 
 This is the one principle where a look at the published guidance comes up
-mostly empty. Anthropic's authoring guide talks at length about
-descriptions, structure, progressive disclosure, and evaluation-driven
-iteration — but nowhere addresses whether a specialized skill behaves
-consistently with the general one it specializes. OpenAI's function-calling
-guidance is silent on it too. None of the sources reviewed for this repo
+mostly empty. Anthropic's [authoring
+guide](https://platform.claude.com/docs/en/agents-and-tools/agent-skills/best-practices)
+talks at length about descriptions, structure, progressive disclosure, and
+evaluation-driven iteration — but nowhere addresses whether a specialized
+skill behaves consistently with the general one it specializes. OpenAI's
+[function-calling
+guidance](https://developers.openai.com/api/docs/guides/function-calling)
+is silent on it too. None of the sources reviewed for this repo
 describe anything resembling a general substitutability guarantee for skill
 specializations — that absence, across every source checked, is itself
 informative. The closest anyone gets in practice is testing one specific,
