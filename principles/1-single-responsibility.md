@@ -33,11 +33,11 @@ ends and another's begins.
 
 ## Do and don't
 
-| Do | Don't |
-|---|---|
-| Give every skill either a closed, validated category, or a description specific enough that its boundary is unambiguous. | Rely on a free-text tag or a vague description nobody enforces. It drifts into a junk-drawer scope within a few skills. |
+| Do                                                                                                                                                 | Don't                                                                                                                                                         |
+|----------------------------------------------------------------------------------------------------------------------------------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| Give every skill either a closed, validated category, or a description specific enough that its boundary is unambiguous.                           | Rely on a free-text tag or a vague description nobody enforces. It drifts into a junk-drawer scope within a few skills.                                       |
 | Split a discipline ("write tests first") from its stack-specific mechanics ("JUnit + MockK") into two skills, related by extension or composition. | Bake stack-specific tooling directly into the general discipline skill "for convenience." Now every team on a different stack forks it or ignores half of it. |
-| Ask, when two unrelated changes keep landing in the same skill: "does this skill have two owners now?" | Measure responsibility by file length. A short skill can still have two jobs; a long one can still have one. |
+| Ask, when two unrelated changes keep landing in the same skill: "does this skill have two owners now?"                                             | Measure responsibility by file length. A short skill can still have two jobs; a long one can still have one.                                                  |
 
 ## Anti-pattern in practice
 

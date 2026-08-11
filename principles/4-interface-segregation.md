@@ -47,12 +47,12 @@ shape, one layer up.
 
 ## Do and don't
 
-| Do | Don't |
-|---|---|
+| Do                                                                                                                                         | Don't                                                                                                                                   |
+|--------------------------------------------------------------------------------------------------------------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------|
 | Keep the always-loaded core to the common path; push advanced/rare sub-capabilities into separate files loaded only by explicit reference. | Inline every sub-capability into one monolithic file "so it's all in one place." Now every invocation pays for content it doesn't need. |
-| Reference supplementary files directly from the core, one hop deep. | Nest references three files deep. An agent skimming with a partial read may never reach the actual content. |
-| Enforce a size ceiling on the always-loaded core with a test or lint, so growth is a decision, not drift. | Let the core file grow unboundedly and notice the context cost only once someone complains it's expensive. |
-| Load tool/skill catalogs on demand, scoped to what the current task needs. | Load every tool's full schema and description up front regardless of relevance to the current turn. |
+| Reference supplementary files directly from the core, one hop deep.                                                                        | Nest references three files deep. An agent skimming with a partial read may never reach the actual content.                             |
+| Enforce a size ceiling on the always-loaded core with a test or lint, so growth is a decision, not drift.                                  | Let the core file grow unboundedly and notice the context cost only once someone complains it's expensive.                              |
+| Load tool/skill catalogs on demand, scoped to what the current task needs.                                                                 | Load every tool's full schema and description up front regardless of relevance to the current turn.                                     |
 
 ## Anti-pattern in practice
 

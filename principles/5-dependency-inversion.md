@@ -71,11 +71,11 @@ just declares "run `pip install x`" is assuming the former.
 
 ## Do and don't
 
-| Do | Don't |
-|---|---|
-| Declare skill-to-skill dependencies by an abstract capability name, resolved by the composition system, not by a specific concrete tool. | Treat a fully-qualified concrete reference (`ServerName:tool_name`) as if it were an abstraction. It's unambiguous, which is good, but it still names one specific implementation. |
-| State required packages/tools explicitly, and treat *whether* runtime installation is allowed as a separate, environment-specific policy question. | Assume a library, binary, or sibling skill is present because it happened to be during authoring. Or assume install-on-demand is always allowed: some runtimes forbid it or require approval. |
-| Write skill-selection logic as a pure function: catalog in, resolved selection out, no I/O inside it. | Let selection logic reach into the filesystem itself. Now "did we pick the right skills" gets harder to test fast and in isolation: you either mock disk access or pay for real file I/O on every run. |
+| Do                                                                                                                                                 | Don't                                                                                                                                                                                                  |
+|----------------------------------------------------------------------------------------------------------------------------------------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| Declare skill-to-skill dependencies by an abstract capability name, resolved by the composition system, not by a specific concrete tool.           | Treat a fully-qualified concrete reference (`ServerName:tool_name`) as if it were an abstraction. It's unambiguous, which is good, but it still names one specific implementation.                     |
+| State required packages/tools explicitly, and treat *whether* runtime installation is allowed as a separate, environment-specific policy question. | Assume a library, binary, or sibling skill is present because it happened to be during authoring. Or assume install-on-demand is always allowed: some runtimes forbid it or require approval.          |
+| Write skill-selection logic as a pure function: catalog in, resolved selection out, no I/O inside it.                                              | Let selection logic reach into the filesystem itself. Now "did we pick the right skills" gets harder to test fast and in isolation: you either mock disk access or pay for real file I/O on every run. |
 
 ## Anti-pattern in practice
 

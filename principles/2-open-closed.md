@@ -44,11 +44,11 @@ exist.
 
 ## Do and don't
 
-| Do | Don't |
-|---|---|
-| Discover skills by directory scan or metadata query at load/startup time. | Maintain a static, per-project list of skill names that has to be hand-edited every time a new skill ships. |
+| Do                                                                                                                                                                | Don't                                                                                                                         |
+|-------------------------------------------------------------------------------------------------------------------------------------------------------------------|-------------------------------------------------------------------------------------------------------------------------------|
+| Discover skills by directory scan or metadata query at load/startup time.                                                                                         | Maintain a static, per-project list of skill names that has to be hand-edited every time a new skill ships.                   |
 | Namespace related tools/skills by service or domain (`asana_search`, `jira_search`) so a new integration adds a new namespace, not a redesign of an existing one. | Give every tool a flat, generic name (`search`, `search2`) that collides the moment a second integration needs the same verb. |
-| Let a specialized skill declare what it extends or depends on; keep the base ignorant of every specialization that exists. | Modify a base skill's content every time a new variant is needed. That's a modification, not an extension. |
+| Let a specialized skill declare what it extends or depends on; keep the base ignorant of every specialization that exists.                                        | Modify a base skill's content every time a new variant is needed. That's a modification, not an extension.                    |
 
 ## Anti-pattern in practice
 

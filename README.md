@@ -44,13 +44,13 @@ it.
 
 ## The five
 
-| # | Principle | One-liner for skills |
-|---|---|---|
-| S | [Single Responsibility](principles/1-single-responsibility.md) | One skill, one reason to change, one legible trigger. Not three jobs wearing one description. |
-| O | [Open/Closed](principles/2-open-closed.md) | New capabilities extend the catalog by being added, tagged, or dropped into a folder. They never require editing what already selects or lists them. |
-| L | [Liskov Substitution](principles/3-liskov-substitution.md) | A specialized skill should honor its base's contract. That's provable only where you actually test for structural equivalence; aspirational everywhere else. |
-| I | [Interface Segregation](principles/4-interface-segregation.md) | A skill's always-loaded surface should be thin; deeper capability loads on demand, not by default. |
-| D | [Dependency Inversion](principles/5-dependency-inversion.md) | Skills depend on an abstract capability resolved elsewhere: not a hardcoded path, not an assumed environment, and not just a concrete reference dressed up as one. |
+| # | Principle                                                      | One-liner for skills                                                                                                                                               |
+|---|----------------------------------------------------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| S | [Single Responsibility](principles/1-single-responsibility.md) | One skill, one reason to change, one legible trigger. Not three jobs wearing one description.                                                                      |
+| O | [Open/Closed](principles/2-open-closed.md)                     | New capabilities extend the catalog by being added, tagged, or dropped into a folder. They never require editing what already selects or lists them.               |
+| L | [Liskov Substitution](principles/3-liskov-substitution.md)     | A specialized skill should honor its base's contract. That's provable only where you actually test for structural equivalence; aspirational everywhere else.       |
+| I | [Interface Segregation](principles/4-interface-segregation.md) | A skill's always-loaded surface should be thin; deeper capability loads on demand, not by default.                                                                 |
+| D | [Dependency Inversion](principles/5-dependency-inversion.md)   | Skills depend on an abstract capability resolved elsewhere: not a hardcoded path, not an assumed environment, and not just a concrete reference dressed up as one. |
 
 ## Where this bends
 

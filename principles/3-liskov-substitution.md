@@ -53,11 +53,11 @@ substitutability.
 
 ## Do and don't
 
-| Do | Don't |
-|---|---|
-| If a set of specializations must share a non-negotiable contract (a closing ritual, a reporting format, a hard rule), extract it into one literal, shared block and test that every specialization carries it byte-for-byte identical. | Assume that because skill B extends or specializes skill A, B behaves consistently with A. Nothing enforces that by construction. |
-| Scope your substitutability claims narrowly (for example, "these five skills share this one enforced block") rather than broadly ("everything that extends anything is substitutable"). | Advertise general Liskov compliance across every extension relationship in the catalog. You can't back that claim with a test, so don't make it. |
-| Treat a failed equality check as a hard build failure, the same way a broken interface would fail a type check. | Let the shared contract drift silently across specializations because "it's just a prompt, it'll be fine." |
+| Do                                                                                                                                                                                                                                     | Don't                                                                                                                                            |
+|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|--------------------------------------------------------------------------------------------------------------------------------------------------|
+| If a set of specializations must share a non-negotiable contract (a closing ritual, a reporting format, a hard rule), extract it into one literal, shared block and test that every specialization carries it byte-for-byte identical. | Assume that because skill B extends or specializes skill A, B behaves consistently with A. Nothing enforces that by construction.                |
+| Scope your substitutability claims narrowly (for example, "these five skills share this one enforced block") rather than broadly ("everything that extends anything is substitutable").                                                | Advertise general Liskov compliance across every extension relationship in the catalog. You can't back that claim with a test, so don't make it. |
+| Treat a failed equality check as a hard build failure, the same way a broken interface would fail a type check.                                                                                                                        | Let the shared contract drift silently across specializations because "it's just a prompt, it'll be fine."                                       |
 
 ## Anti-pattern in practice
 
