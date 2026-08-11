@@ -51,12 +51,17 @@ satisfies it, possibly differently across deployments. The same guidance
 separately warns against assuming a package or tool is already installed:
 `"Use the pdf library to process the file"` is flagged as a bad example
 because it depends on an implicit, unstated piece of environment instead of
-declaring the dependency explicitly. That part *is* squarely about
-inversion: state what you depend on, don't assume it — and whether runtime
-installation is even permitted is itself a separate, environment-specific
-policy question. Some runtimes allow it freely; others forbid installing or
-fetching anything at runtime without a prior approval step. A skill that
-just declares "run `pip install x`" is assuming the former.
+declaring the dependency explicitly. That part supports the same design
+pressure as inversion — state what you depend on, don't assume it — but it
+becomes actual dependency inversion only once the dependency is expressed
+as an abstract capability resolved elsewhere, not a named concrete package.
+Declaring `pip install pypdf` is real progress (explicit instead of
+assumed) but it still names one specific library, not a capability a
+composition layer could swap out. Whether runtime installation is even
+permitted is a separate, environment-specific policy question: some
+runtimes allow it freely; others forbid installing or fetching anything at
+runtime without a prior approval step. A skill that just declares "run `pip
+install x`" is assuming the former.
 [[source]](https://platform.claude.com/docs/en/agents-and-tools/agent-skills/best-practices)
 
 ## Do / Don't

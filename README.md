@@ -27,12 +27,16 @@ and file structure.
 
 Different skill systems express the same underlying ideas with different
 mechanics — a closed category taxonomy in one, a free-text `description`
-field in another, a folder-per-domain convention in a third. Every principle
-page below illustrates the idea with **more than one real convention** —
-including Anthropic's own published Agent Skills spec (`name` +
-`description` frontmatter, gerund naming, progressive disclosure) alongside
-a generic metadata-taxonomy style — so the takeaway is the underlying
-property, not the syntax that happens to express it in any one tool.
+field in another, a folder-per-domain convention in a third. Across the
+principle pages, more than one real convention shows up — including
+Anthropic's own published Agent Skills spec (`name` + `description`
+frontmatter, gerund naming, progressive disclosure) alongside a generic
+metadata-taxonomy style — so the takeaway is the underlying property, not
+the syntax that happens to express it in any one tool. Not every page
+carries two sourced conventions to make its point: Liskov Substitution and
+Dependency Inversion lean more on illustrative generic mechanisms, because
+the published industry conventions for those two are thinner to begin
+with — which the pages themselves say plainly rather than papering over.
 
 ## The five
 
@@ -42,7 +46,7 @@ property, not the syntax that happens to express it in any one tool.
 | O | [Open/Closed](principles/2-open-closed.md) | New capabilities extend the catalog by being added, tagged, or dropped in a folder — never by editing what already selects or lists them. |
 | L | [Liskov Substitution](principles/3-liskov-substitution.md) | A specialized skill should honor its base's contract — provable only where you actually test for structural equivalence, aspirational everywhere else. |
 | I | [Interface Segregation](principles/4-interface-segregation.md) | A skill's always-loaded surface should be thin; deeper capability loads on demand, not by default. |
-| D | [Dependency Inversion](principles/5-dependency-inversion.md) | Skills depend on named abstractions — capabilities, other tools by qualified name — never on a hardcoded path or an assumed environment. |
+| D | [Dependency Inversion](principles/5-dependency-inversion.md) | Skills depend on an abstract capability resolved elsewhere — not a hardcoded path, not an assumed environment, and not just a concrete reference dressed up as one. |
 
 ## Where this bends
 

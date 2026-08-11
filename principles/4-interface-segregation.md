@@ -31,11 +31,13 @@ every other loaded skill, so "every token has to justify its existence." The
 same guide gives a direct concise-vs-verbose pair as the anti-pattern to
 avoid, and separately warns against nesting references more than one level
 deep from `SKILL.md`, because an agent previewing a file with a partial read
-may never reach content that's two hops away. OpenAI's function-calling
-guidance converges on the same idea from the tool-list side: "a bloated tool
-list with twenty verbose function descriptions can quietly add thousands of
-tokens to every call," and the fix is to load only the tools relevant to the
-current conversation rather than the entire catalog up front.
+may never reach content that's two hops away. OpenAI's function-calling guidance converges on the same idea from the
+tool-list side: function definitions "count against the model's context
+limit and are billed as input tokens," so the guide recommends aiming for
+"fewer than 20 functions available at the start of a turn" and using tool
+search "to defer large or infrequently used parts of your tool surface
+instead of exposing everything up front" — the same thin-core,
+load-on-demand shape, one layer up.
 [[source: Anthropic]](https://platform.claude.com/docs/en/agents-and-tools/agent-skills/best-practices)
 [[source: OpenAI]](https://developers.openai.com/api/docs/guides/function-calling)
 

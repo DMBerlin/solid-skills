@@ -12,9 +12,12 @@ case is a `Square` that subtypes `Rectangle` by keeping width and height
 locked together — it type-checks perfectly, and still breaks any code that
 assumes setting `width` leaves `height` alone. Structural compatibility was
 always necessary for substitutability, never sufficient, even in strictly
-typed languages. For a skill, there isn't even the structural half to lean
-on: if a specialized skill extends, or is meant to stand in for, a base
-capability, the intent is that
+typed languages. For a skill, even a system that validates frontmatter or
+schema shape at load time is only checking that the skill is well-formed —
+that a category tag is one of a closed set, say — not that a specialization
+honors the base's interface or behavior. That's a real structural check; it
+just doesn't reach behavioral substitutability. If a specialized skill
+extends, or is meant to stand in for, a base capability, the intent is that
 anything relying on "the discipline for this task" gets the same guarantees
 regardless of which specialization loaded — the same closing checklist, the
 same failure behavior, the same non-negotiable rules — with only the
