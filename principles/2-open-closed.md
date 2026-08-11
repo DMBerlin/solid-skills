@@ -54,7 +54,7 @@ exist.
 
 Here's a second integration forcing a rename of the first:
 
-```
+```yaml
 tools:
   search        # originally: Asana search
   search_2      # now: Jira search, bolted on
@@ -66,7 +66,7 @@ clean addition.
 
 Here's the same set, namespaced from the start:
 
-```
+```yaml
 tools:
   asana_search
   jira_search
