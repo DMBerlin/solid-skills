@@ -22,8 +22,8 @@ mechanics swapped out. But a model interpreting that specialized skill can
 drift from the base's intent in ways nothing catches at authoring time.
 
 Calling that "solved" would be dishonest. The honest version:
-**substitutability is aspirational by default, and becomes real only where
-you deliberately test for it.**
+**substitutability is aspirational by default, and has enforceable evidence
+only where you deliberately test a defined contract.**
 
 ## What frontier labs say — or rather, don't
 

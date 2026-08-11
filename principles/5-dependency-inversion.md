@@ -14,15 +14,21 @@ does X" — resolved by whatever composes skills together, not a hardcoded
 path to a specific sibling skill's file or an assumption about which
 concrete tool happens to be present.
 
-**Architecture-level — the one that isn't a metaphor at all:** the part of
-the system that decides *which* skills apply (discovery, selection, conflict
-resolution) should be a pure function of data — it receives an in-memory
-representation of the catalog as a parameter and touches no filesystem, no
-network, no clock. All the actual I/O happens at the edges of the system and
-gets *injected into* that pure core. The high-level policy ("how do we pick
-skills") doesn't depend on the low-level detail ("how do we read files");
-both depend on a shared, typed abstraction of what a skill and a catalog
-look like.
+**Architecture-level — a more literal application, not just a metaphor:**
+strictly, dependency inversion says the high-level policy ("how do we pick
+skills") should depend on an abstraction, and the low-level detail ("how do
+we read files") should depend on that same abstraction — not the other way
+around. It does not, by itself, require that policy to be a pure function.
+Purity is a separate, complementary choice: if skill selection is written
+as a pure function of data — an in-memory catalog goes in, a resolved
+selection comes out, nothing inside it touches a filesystem, a network, or
+a clock — that's a particularly clean way to *guarantee* the dependency
+direction stays inverted, because a pure function has no way to quietly
+reach out and depend on a concrete low-level detail even by accident. All
+the actual I/O then happens at the edges of the system and gets *injected
+into* that core as data. Treat this as a recommended implementation that
+makes the inversion easy to verify and easy to test — not as the
+definition of the principle itself.
 
 ## What frontier labs say
 
