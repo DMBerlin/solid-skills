@@ -54,13 +54,16 @@ with — which the pages themselves say plainly rather than papering over.
 
 SOLID was built for statically typed, compiled, polymorphic code. A skill is
 a natural-language artifact, interpreted probabilistically by a model — not
-compiled and type-checked. Four of these five principles have real,
-buildable, often test-or-eval-enforceable counterparts once you're managing
-a catalog of skills rather than one monolithic prompt — and, encouragingly,
-frontier labs' own published skill-authoring guidance independently
-converges on several of them (progressive disclosure, unambiguous
-descriptions, avoiding overlapping capabilities) without ever mentioning
-SOLID by name. Liskov Substitution is the honest exception: none of the
+compiled and type-checked. Several of these five principles have real, buildable, often
+test-or-eval-enforceable counterparts once you're managing a catalog of
+skills rather than one monolithic prompt — though the strength of that
+evidence varies. Interface Segregation and Single Responsibility are backed
+by direct, quoted frontier-lab guidance (progressive disclosure,
+unambiguous descriptions) that converges on the same shape independently,
+without ever mentioning SOLID by name. Open/Closed and Dependency Inversion
+are supported more unevenly, and lean on generic illustration where the
+published guidance doesn't reach far enough. Liskov Substitution is the
+honest exception: none of the
 sources below describe anything resembling a general substitutability
 guarantee across skill specializations. That absence is itself evidence for
 treating it as the principle that stretches furthest.

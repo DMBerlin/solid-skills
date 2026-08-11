@@ -21,16 +21,20 @@ base ever needing to know the specialization exists.
 
 ## What frontier labs say
 
-Anthropic's Agent Skills are designed so that the name and description of
-every installed skill are pre-loaded into the system prompt at startup
-automatically — adding a new, correctly described skill doesn't require
-rewriting a manifest of the skills that already exist.
+Anthropic's Agent Skills are designed so that, once a skill is installed on
+a given surface, its name and description are pre-loaded into the system
+prompt automatically alongside every other installed skill — no manifest
+of the skills already there needs to be rewritten to make room for a new
+one.
 [[source: Agent Skills overview]](https://platform.claude.com/docs/en/agents-and-tools/agent-skills/overview)
-That's automated *discovery*, not automated *governance*: it says nothing
-about whether a deployment should also gate which skills get installed,
-versioned, or exposed to a given user — those stay deliberate policy
-decisions layered on top, not something the open/closed property removes
-the need for. Anthropic's tool-naming guidance pushes a related idea from a
+"Once installed" is doing real work: the mechanics of getting a skill onto
+a surface in the first place vary — Claude Code picks up skills placed in a
+local directory, while claude.ai and the API require an explicit upload or
+configuration step first. And that's automated *discovery* after
+installation, not automated *governance*: it says nothing about whether a
+deployment should also gate which skills get installed, versioned, or
+exposed to a given user — those stay deliberate policy decisions layered on
+top, not something the open/closed property removes the need for. Anthropic's tool-naming guidance pushes a related idea from a
 different angle: namespace tools by service or resource (`asana_search`,
 `jira_search`, `asana_projects_search`) precisely so that adding a new tool
 for a new service never requires renaming or restructuring the tools that

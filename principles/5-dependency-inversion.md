@@ -70,7 +70,7 @@ install x`" is assuming the former.
 |---|---|
 | Declare skill-to-skill dependencies by an abstract capability name, resolved by the composition system — not by a specific concrete tool. | Treat a fully-qualified concrete reference (`ServerName:tool_name`) as if it were an abstraction. It's unambiguous, which is good, but it still names one specific implementation. |
 | State required packages/tools explicitly, and treat *whether* runtime installation is allowed as a separate, environment-specific policy question. | Assume a library, binary, or sibling skill is present because it happened to be during authoring — or assume install-on-demand is always allowed; some runtimes forbid it or require approval. |
-| Write skill-selection logic as a pure function: catalog in, resolved selection out, no I/O inside it. | Let selection logic reach into the filesystem itself — now "did we pick the right skills" can't be unit-tested without mocking disk access. |
+| Write skill-selection logic as a pure function: catalog in, resolved selection out, no I/O inside it. | Let selection logic reach into the filesystem itself — now "did we pick the right skills" gets harder to test fast and in isolation: you either mock disk access or pay for real file I/O on every run. |
 
 ## Anti-pattern in practice
 
@@ -118,9 +118,18 @@ the composition layer's mapping does. That's the actual inversion: the
 high-level policy ("what capability is needed") doesn't depend on the
 low-level detail ("which vendor or library provides it").
 
+If a required capability isn't configured for this environment, the skill
+should stop and report exactly which binding is missing — not guess at a
+tool, silently skip the step, or reach for a package installer on its own.
+A missing binding is a configuration gap for whoever owns the composition
+layer to fix, not something the skill should improvise around.
+
 ## Smell to watch for
 
-Any test for "did we select the right skills" that requires setting up
-files on disk. Also: a skill whose instructions have to be rewritten every
-time you swap a vendor or a library — that's a sign the dependency was
-concrete and explicit, which is good, but never actually inverted.
+A test for "did we select the right skills" that has to set up real files
+on disk first is a smell, not proof the design is broken — it's evidence
+the policy is coupled to I/O, which makes tests slower and more brittle
+than a pure version would be. Also: a skill whose instructions have to be
+rewritten every time you swap a vendor or a library — that's a sign the
+dependency was concrete and explicit, which is good, but never actually
+inverted.
