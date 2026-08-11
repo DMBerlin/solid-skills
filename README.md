@@ -23,6 +23,23 @@ grounds it in what frontier labs have actually published about writing good
 skills and tools. Not just frontmatter shape: description quality, body
 content, and file structure too.
 
+## Use this as a skill, not just a read
+
+This repository is also a working skill. Its [`SKILL.md`](SKILL.md) turns
+the five principles into an audit-and-refactor procedure: point a model at
+your own skill, tool, or prompt catalog and this repo, and ask it to apply
+that procedure directly.
+
+Two ways to use it:
+
+- Drop the cloned repository into your agent runtime's skills directory
+  (for example, a `skills/solid-skills/` folder for a Claude Agent Skills
+  setup) so it gets discovered automatically when someone asks to review
+  or refactor a skill catalog.
+- Paste this repository, or a link to it, into any chat-based model and ask
+  it to refactor your skills following `SKILL.md`. No special runtime
+  required. The file is a self-contained procedure.
+
 ## Not tied to one framework
 
 Different skill systems express the same underlying ideas with different
