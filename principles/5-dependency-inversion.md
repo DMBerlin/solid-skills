@@ -26,26 +26,39 @@ look like.
 
 ## What frontier labs say
 
-Anthropic's tool-use guidance has a direct, content-level example of this:
-when a skill uses an MCP tool, always reference it by a fully-qualified name
-— `ServerName:tool_name` — rather than a bare tool name, "to avoid 'tool not
-found' errors," because "without the server prefix, Claude may fail to
-locate the tool, especially when multiple MCP servers are available." That's
-a dependency declared against a stable, namespaced abstraction instead of an
-assumption about which concrete server happens to be loaded. The same
-guidance separately flags assuming a package or tool is already installed:
-`"Use the pdf library to process the file"` is called out as a bad example
-precisely because it depends on an implicit, unstated piece of environment
-instead of declaring the dependency explicitly (state the install step,
-`pip install pypdf`, then use it).
+The clearest published guidance here actually documents a different,
+related virtue — unambiguous, explicit dependency declaration — which is
+*necessary* for inversion but not *sufficient* for it on its own, and it's
+worth being precise about the difference. Anthropic's tool-use guidance
+recommends that when a skill uses an MCP tool, it reference it by a
+fully-qualified name — `ServerName:tool_name` — rather than a bare tool
+name, "to avoid 'tool not found' errors," because "without the server
+prefix, Claude may fail to locate the tool, especially when multiple MCP
+servers are available." Read carefully, that's a concrete binding made
+unambiguous — it names one exact server, not an abstraction a composition
+layer could swap out later. It solves a real problem (ambiguity,
+collisions between same-named tools) but it is not, by itself, dependency
+inversion. Genuine inversion would have the skill depend on a *capability*
+— "pdf-text-extraction," not "pypdf-mcp-server:extract" — and let whatever
+assembles the running system decide which concrete server or library
+satisfies it, possibly differently across deployments. The same guidance
+separately warns against assuming a package or tool is already installed:
+`"Use the pdf library to process the file"` is flagged as a bad example
+because it depends on an implicit, unstated piece of environment instead of
+declaring the dependency explicitly. That part *is* squarely about
+inversion: state what you depend on, don't assume it — and whether runtime
+installation is even permitted is itself a separate, environment-specific
+policy question. Some runtimes allow it freely; others forbid installing or
+fetching anything at runtime without a prior approval step. A skill that
+just declares "run `pip install x`" is assuming the former.
 [[source]](https://platform.claude.com/docs/en/agents-and-tools/agent-skills/best-practices)
 
 ## Do / Don't
 
 | Do | Don't |
 |---|---|
-| Declare skill-to-tool or skill-to-skill dependencies by fully-qualified, stable name, resolved by the composition system. | Reference a bare tool/skill name and hope only one thing in the whole catalog happens to match it. |
-| State required packages/tools explicitly, with the install step, inside the skill itself. | Assume a library, binary, or sibling skill is present because it happened to be during authoring. |
+| Declare skill-to-skill dependencies by an abstract capability name, resolved by the composition system — not by a specific concrete tool. | Treat a fully-qualified concrete reference (`ServerName:tool_name`) as if it were an abstraction. It's unambiguous, which is good, but it still names one specific implementation. |
+| State required packages/tools explicitly, and treat *whether* runtime installation is allowed as a separate, environment-specific policy question. | Assume a library, binary, or sibling skill is present because it happened to be during authoring — or assume install-on-demand is always allowed; some runtimes forbid it or require approval. |
 | Write skill-selection logic as a pure function: catalog in, resolved selection out, no I/O inside it. | Let selection logic reach into the filesystem itself — now "did we pick the right skills" can't be unit-tested without mocking disk access. |
 
 ## Anti-pattern in practice
@@ -61,24 +74,42 @@ Which `search` tool, of possibly several loaded? Is `pdf` installed, and by
 whom? The dependency is real but invisible — it works only by accident, on
 whichever machine happens to already have it set up.
 
-**Good — dependencies named and declared:**
+**Better, but still concrete — unambiguous, not inverted:**
 
 ```markdown
-Use the Jira:search_issues tool to look up the ticket.
-
-Install the required package: `pip install pypdf`, then extract the
-attachment text:
-
-    from pypdf import PdfReader
-    reader = PdfReader("attachment.pdf")
+Use the Jira:search_issues tool to look up the ticket, then extract the
+attachment text with pypdf (`pip install pypdf` if not already available).
 ```
 
-Every dependency is a stable, explicit name — a namespaced tool reference or
-a declared package — not an assumption about the environment it happened to
-be authored on.
+This fixes the ambiguity — no more guessing which `search` — and states the
+dependency instead of assuming it. That's real progress. But the skill is
+still hardcoded to Jira and to pypdf specifically: swap the ticketing system
+or the PDF library in a different deployment, and the skill's instructions
+have to be rewritten.
+
+**Good — the skill depends on a capability, not a concrete tool:**
+
+```markdown
+Look up the ticket using this environment's configured ticketing
+capability, then extract the attachment text using this environment's
+configured PDF-extraction capability.
+```
+
+```yaml
+# resolved by the composition layer, not authored into the skill:
+capabilities:
+  ticketing: Jira:search_issues
+  pdf-extraction: pypdf-mcp:extract_text
+```
+
+The skill's instructions never change when the concrete binding does — only
+the composition layer's mapping does. That's the actual inversion: the
+high-level policy ("what capability is needed") doesn't depend on the
+low-level detail ("which vendor or library provides it").
 
 ## Smell to watch for
 
 Any test for "did we select the right skills" that requires setting up
-files on disk, or any instruction that only works because of something true
-about one particular machine at one particular moment.
+files on disk. Also: a skill whose instructions have to be rewritten every
+time you swap a vendor or a library — that's a sign the dependency was
+concrete and explicit, which is good, but never actually inverted.

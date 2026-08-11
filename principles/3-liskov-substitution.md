@@ -5,9 +5,16 @@
 
 ## Translated for skills — and why this one is different from the other four
 
-For compiled code, a type checker proves substitutability before the program
-ships. For a skill, there's no equivalent proof: if a specialized skill
-extends, or is meant to stand in for, a base capability, the intent is that
+For compiled code, a type checker can catch *structural* incompatibility
+before the program ships — a subtype method with an incompatible signature,
+say. It generally cannot catch *behavioral* incompatibility: the textbook
+case is a `Square` that subtypes `Rectangle` by keeping width and height
+locked together — it type-checks perfectly, and still breaks any code that
+assumes setting `width` leaves `height` alone. Structural compatibility was
+always necessary for substitutability, never sufficient, even in strictly
+typed languages. For a skill, there isn't even the structural half to lean
+on: if a specialized skill extends, or is meant to stand in for, a base
+capability, the intent is that
 anything relying on "the discipline for this task" gets the same guarantees
 regardless of which specialization loaded — the same closing checklist, the
 same failure behavior, the same non-negotiable rules — with only the
@@ -25,9 +32,10 @@ mostly empty. Anthropic's authoring guide talks at length about
 descriptions, structure, progressive disclosure, and evaluation-driven
 iteration — but nowhere addresses whether a specialized skill behaves
 consistently with the general one it specializes. OpenAI's function-calling
-guidance is silent on it too. That's not a gap in this research, it's a
-signal: nobody has published a general mechanism for this because there
-isn't one yet. The closest anyone gets in practice is testing one specific,
+guidance is silent on it too. None of the sources reviewed for this repo
+describe anything resembling a general substitutability guarantee for skill
+specializations — that absence, across every source checked, is itself
+informative. The closest anyone gets in practice is testing one specific,
 narrow contract for equality — which is a much smaller, much more honest
 claim than substitutability.
 

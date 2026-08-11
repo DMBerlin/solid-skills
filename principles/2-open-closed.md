@@ -21,15 +21,21 @@ base ever needing to know the specialization exists.
 
 ## What frontier labs say
 
-Anthropic's Skills architecture is built around exactly this: skills are
-discovered by scanning a directory and pre-loading each one's metadata into
-the system prompt — the runtime never needs a hand-written manifest naming
-every skill in advance. Anthropic's tool-naming guidance pushes the same
-idea from a different angle: namespace tools by service or resource
-(`asana_search`, `jira_search`, `asana_projects_search`) precisely so that
-adding a new tool for a new service never requires renaming or restructuring
-the tools that already exist.
-[[source]](https://www.anthropic.com/engineering/writing-tools-for-agents)
+Anthropic's Agent Skills are designed so that the name and description of
+every installed skill are pre-loaded into the system prompt at startup
+automatically — adding a new, correctly described skill doesn't require
+rewriting a manifest of the skills that already exist.
+[[source: Agent Skills overview]](https://platform.claude.com/docs/en/agents-and-tools/agent-skills/overview)
+That's automated *discovery*, not automated *governance*: it says nothing
+about whether a deployment should also gate which skills get installed,
+versioned, or exposed to a given user — those stay deliberate policy
+decisions layered on top, not something the open/closed property removes
+the need for. Anthropic's tool-naming guidance pushes a related idea from a
+different angle: namespace tools by service or resource (`asana_search`,
+`jira_search`, `asana_projects_search`) precisely so that adding a new tool
+for a new service never requires renaming or restructuring the tools that
+already exist.
+[[source: Writing effective tools for AI agents]](https://www.anthropic.com/engineering/writing-tools-for-agents)
 
 ## Do / Don't
 

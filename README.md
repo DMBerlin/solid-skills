@@ -70,8 +70,11 @@ Each principle page has the same shape:
 - worked examples, including an explicit anti-pattern
 - a smell to watch for
 
-None of the examples reference a specific product or company — they're
-deliberately generic so the patterns transfer.
+Examples name real, widely known products (Jira, Asana, BigQuery, JUnit,
+GitHub) only as familiar reference points for illustrating a pattern — none
+of them tie a principle to one proprietary framework, internal system, or
+company's specific architecture. The principle is the point; the product
+names are just easier to picture than "Service A" and "Service B."
 
 ## Sources
 

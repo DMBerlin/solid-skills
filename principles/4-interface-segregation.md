@@ -18,9 +18,13 @@ This is the principle where the published guidance is most explicit.
 Anthropic's Skills architecture is *built* around it, under the name
 "progressive disclosure" — a three-level system. Level 1 is just `name` +
 `description` for every installed skill, pre-loaded into the system prompt
-at a cost of roughly a hundred tokens each. Level 2 is the full `SKILL.md`
+with a small, fixed footprint per skill. Level 2 is the full `SKILL.md`
 body, loaded only once a skill is triggered. Level 3+ is bundled reference
-files, loaded only when `SKILL.md` explicitly points to them. Anthropic
+files, loaded only when `SKILL.md` explicitly points to them. This staged
+loading is a runtime capability the platform provides — not an automatic
+property of every skill format; a system without it has to approximate the
+same effect by convention (splitting files, and disciplining yourself to
+reference the rarely-needed ones only when actually needed). Anthropic
 states the reasoning plainly: "the context window is a public good" — every
 token in a skill competes with conversation history, the system prompt, and
 every other loaded skill, so "every token has to justify its existence." The
